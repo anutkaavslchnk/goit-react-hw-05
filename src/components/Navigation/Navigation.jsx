@@ -13,7 +13,9 @@ const Navigation = () => {
         <nav className={s.nav}>
     <NavLink className={buildLinkClass} to="/">Home</NavLink>
     <NavLink   className={buildLinkClass} to="/movies">Movies</NavLink>
+    
     </nav>
+    <div className={s.line}></div>
     </div>
   )
 };

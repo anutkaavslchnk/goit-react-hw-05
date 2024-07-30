@@ -49,3 +49,9 @@ export const fetchReview = async (movie_id) => {
       return response.data.results;
 
 }
+export const fetchSearch = async (query) => {
+  const urlInfo = `https://api.themoviedb.org/3/search/movie?include_adult=false&language=en-US&page=1&query=${query}`;
+
+    const response = await axios.get(urlInfo, optionsInfoAboutMovie);
+    return response.data.results;
+  }

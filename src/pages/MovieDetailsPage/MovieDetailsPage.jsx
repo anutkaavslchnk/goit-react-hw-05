@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { NavLink, Outlet, useParams } from "react-router-dom";
+import { Suspense, useEffect,useState } from "react";
+import { Link, NavLink, Outlet, useLocation, useParams } from "react-router-dom";
 import { fetchInfoAboutMovie } from "../../services/api";
 import clsx from "clsx";
 import s from './MovieDetails.module.css';
@@ -9,6 +9,8 @@ const buildLinkClass = ({ isActive }) => {
 const MovieDetailsPage = () => {
   const [details, setDetails] = useState(null);
   const { movieId } = useParams();
+const location=useLocation();
+
 
   useEffect(() => {
     const getData = async () => {
@@ -28,20 +30,28 @@ const MovieDetailsPage = () => {
   }
 
   const posterUrl = `https://image.tmdb.org/t/p/w500${details.poster_path}`;
-
+  const backLink = location.state?.from ?? '/';
   return (
-    <div>
-      <img src={posterUrl} alt={details.title} />
-      <h2>{details.title}</h2>
-      <p>User Score: {details.vote_average}</p>
-      <p>{details.overview}</p>
+    <div >
+    <Link className={s.back} to={backLink}>Go back</Link>
+    <div  className={s.cont}>
+    <h2>{details.title}</h2>
+      <img className={s.image} src={posterUrl} alt={details.title} />
+    
+      </div>
+      <p><span className={s.span}>User Score:</span> {details.vote_average}</p>
+      <p className={s.over}>{details.overview}</p>
+     
       <p>Additional info:</p>
       <nav className={s.nav}>
 
         <NavLink className={buildLinkClass} to='cast'>Cast</NavLink>
         <NavLink className={buildLinkClass} to='review'>Review</NavLink>
       </nav>
+      <Suspense fallback={<h2>Loading your component!</h2>}>
       <Outlet></Outlet>
+      </Suspense>
+
     </div>
   );
 };
