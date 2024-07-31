@@ -6,15 +6,18 @@ const MovieReviews = () => {
   const [reviews, setReviews]=useState([]);
   const params=useParams();
   useEffect(()=>{
+    const getData=async()=>{
 try{
-const getData=async()=>{
+
   const data=await fetchReview(params.movieId);
   setReviews(data);
-}
-getData();
+
+
 }catch(error){
 console.log(error);
 }
+    }
+    getData();
   },[params.movieId])
   if(reviews.length===0){
     return <h3>We don`t have anything</h3>

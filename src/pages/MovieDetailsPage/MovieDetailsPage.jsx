@@ -1,4 +1,4 @@
-import { Suspense, useEffect,useState } from "react";
+import { Suspense, useEffect,useRef,useState } from "react";
 import { Link, NavLink, Outlet, useLocation, useParams } from "react-router-dom";
 import { fetchInfoAboutMovie } from "../../services/api";
 import clsx from "clsx";
@@ -9,7 +9,9 @@ const buildLinkClass = ({ isActive }) => {
 const MovieDetailsPage = () => {
   const [details, setDetails] = useState(null);
   const { movieId } = useParams();
+
 const location=useLocation();
+const backBtn=useRef(location?.state || '/movies');
 
 
   useEffect(() => {
@@ -30,10 +32,10 @@ const location=useLocation();
   }
 
   const posterUrl = `https://image.tmdb.org/t/p/w500${details.poster_path}`;
-  const backLink = location.state?.from ?? '/';
+
   return (
     <div >
-    <Link className={s.back} to={backLink}>Go back</Link>
+    <Link className={s.back} to={backBtn.current}>Go back</Link>
     <div  className={s.cont}>
     <h2>{details.title}</h2>
       <img className={s.image} src={posterUrl} alt={details.title} />

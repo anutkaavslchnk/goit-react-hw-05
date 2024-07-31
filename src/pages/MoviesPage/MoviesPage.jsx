@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { fetchSearch } from "../../services/api";
 import { NavLink, useLocation, useSearchParams } from "react-router-dom";
 import s from './MoviePage.module.css';
@@ -7,26 +7,32 @@ const MoviesPage = () => {
   const query = searchParams.get('query') || '';
   const [search, setSearch] = useState(query);
   const [movies, setMovies] = useState([]);
-  const location=useLocation();
-  console.log(location)
+  const location = useLocation();
 
   const handleInputChange = (newValue) => {
     setSearch(newValue);
   };
 
-  const handleSearch = async () => {
+  const handleSearch = () => {
     setSearchParams({ query: search });
-    if (!search){
-      return setSearchParams({});
-    }
-    try {
-      const data = await fetchSearch(search);
-      setMovies(data);
-      
-    } catch (error) {
-      console.log(error);
-    }
   };
+
+  useEffect(() => {
+    const fetchMovies = async () => {
+      if (!query) {
+        setMovies([]);
+        return;
+      }
+      try {
+        const data = await fetchSearch(query);
+        setMovies(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchMovies();
+  }, [query]);
 
   return (
     <div>
@@ -41,7 +47,9 @@ const MoviesPage = () => {
       <ul>
         {movies.map(movie => (
           <li key={movie.id}>
-            <NavLink  className={s.linkmov}to={`/movies/${movie.id}`} state={{ from: location }}>{movie.title}</NavLink>
+            <NavLink className={s.linkmov} to={`/movies/${movie.id}`} state={{ from: location }}>
+              {movie.title}
+            </NavLink>
           </li>
         ))}
       </ul>
