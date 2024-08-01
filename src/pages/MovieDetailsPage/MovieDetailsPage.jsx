@@ -11,7 +11,7 @@ const MovieDetailsPage = () => {
   const { movieId } = useParams();
 
 const location=useLocation();
-const backBtn=useRef(location?.state || '/movies');
+const backBtn=useRef(location?.state || '');
 
 
   useEffect(() => {
